@@ -3,20 +3,23 @@
 	"publisher": "codelingo",
 	"displayName": "CodeLingo Capture",
 	"description": "CodeLingo Capture support for Visual Studio Code",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"icon": "images/cl-logo.png",
 	"engines": {
 		"vscode": "^1.31.0"
 	},
 	"categories": [
-		"Other"
+		"Linters",
+		"Debuggers",
+		"Formatters",
+		"Language Packs"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/codelingo/ideplugins"
-	  },
+		"url": "https://github.com/codelingo/vscode-extension"
+	},
 	"bugs": {
-		"url": "https://github.com/codelingo/codelingo/issues"
+		"url": "https://github.com/codelingo/vscode-extension/issues"
 	},
 	"activationEvents": [
 		"onCommand:codelingo.capture"

@@ -1,11 +1,11 @@
 # CodeLingo Capture
 
-[![Slack](https://img.shields.io/badge/Slack-CodeLingo-green?style=flat)](https://codelingo.slack.com/messages/codelingo-dev) 
+[![Slack](https://img.shields.io/badge/Slack-CodeLingo-green?style=flat)](https://codelingo.slack.com/messages/codelingo-dev)
 [![GitHub](https://img.shields.io/github/stars/codelingo/codelingo?style=social)](https://github.com/codelingo/codelingo)
 
-Capture ideas for needed coding rules directly from VSCode simply by selecting the code and noting the needed rule idea.
+Capture ideas needed for coding Rules directly from VSCode simply by selecting the code and noting the needed Rule idea.
 
-![alt text](https://raw.githubusercontent.com/codelingo/ideplugins/master/vscode/images/capture-example.png "CodeLingo Capture example")
+![alt text](https://raw.githubusercontent.com/codelingo/vscode-extension/master/images/capture-example.png 'CodeLingo Capture example')
 
 ## Login
 
