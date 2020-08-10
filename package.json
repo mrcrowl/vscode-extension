@@ -3,7 +3,7 @@
 	"publisher": "codelingo",
 	"displayName": "CodeLingo Capture",
 	"description": "CodeLingo Capture support for Visual Studio Code",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"icon": "images/cl-logo.png",
 	"engines": {
 		"vscode": "^1.31.0"
