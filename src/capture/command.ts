@@ -120,10 +120,7 @@ async function inferContextFromActiveEditor(): Promise<{
 }
 
 function descriptionFromSource(source: CaptureSource) {
-  return `\`\`\`\n${source.content}\n\`\`\`\n\nRule captured from lines ${
-    source.lineRange?.[0]
-  } to ${source.lineRange?.[1]} of ${source.filepath} in commit ${source.commit?.hash.substring(
-    0,
-    7
-  )}`;
+  return `\`\`\`\n${source.content}\n\`\`\`\n\nCaptured from lines ${source.lineRange?.[0]} to ${
+    source.lineRange?.[1]
+  } in ${source.filepath} of commit ${source.commit?.hash.substring(0, 7)}`;
 }
