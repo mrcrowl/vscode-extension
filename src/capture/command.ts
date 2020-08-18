@@ -1,5 +1,5 @@
 import config from '../config';
-import { ProgressLocation, window, Range, SelectionRange, Position } from 'vscode';
+import { ProgressLocation, window } from 'vscode';
 import { CaptureSource, LineRange, Repo, Rule } from './model';
 import * as git from '../git';
 import * as ui from '../ui';
@@ -103,7 +103,6 @@ async function inferContextFromActiveEditor(): Promise<{
   }
 
   const { start, end } = editor.selection;
-
   const lineRange: LineRange = [start.line + 1, end.line + 1];
   const content = editor.document.getText(editor.selection);
   const uri = editor.document.uri;
