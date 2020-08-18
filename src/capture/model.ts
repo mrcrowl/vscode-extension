@@ -8,6 +8,7 @@ export interface CaptureSource {
   repo: string | undefined;
   filepath: string | undefined;
   lineRange: LineRange | undefined;
+  content: string | undefined;
   commit: Commit | undefined;
 }
 

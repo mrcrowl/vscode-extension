@@ -1,5 +1,5 @@
 import config from '../config';
-import { ProgressLocation, window } from 'vscode';
+import { ProgressLocation, window, Range, SelectionRange, Position } from 'vscode';
 import { CaptureSource, LineRange, Repo, Rule } from './model';
 import * as git from '../git';
 import * as ui from '../ui';
@@ -17,7 +17,7 @@ export default async function capture(): Promise<any> {
     return await auth.authenticate();
   }
 
-  const { repos, filepath, lineRange, commit } = await inferContextFromActiveEditor();
+  const { repos, filepath, lineRange, content, commit } = await inferContextFromActiveEditor();
   if (!repos) {
     return await ui.errorNoRepoDetected();
   }
@@ -33,7 +33,14 @@ export default async function capture(): Promise<any> {
     return await ui.errorNoRepoChosen(); // user didn't choose a repo
   }
 
-  const source: CaptureSource = { owner: repo.owner, repo: repo.name, filepath, lineRange, commit };
+  const source: CaptureSource = {
+    owner: repo.owner,
+    repo: repo.name,
+    filepath,
+    lineRange,
+    content,
+    commit,
+  };
   const rule = await storeRule(message, source, auth.accessToken)
     .then((response) => {
       const rule = response.data;
@@ -87,6 +94,7 @@ async function inferContextFromActiveEditor(): Promise<{
   repos?: Repo[];
   filepath?: string;
   lineRange?: [number, number];
+  content?: string;
   commit?: Commit;
 }> {
   const editor = window.activeTextEditor;
@@ -95,7 +103,9 @@ async function inferContextFromActiveEditor(): Promise<{
   }
 
   const { start, end } = editor.selection;
+
   const lineRange: LineRange = [start.line + 1, end.line + 1];
+  const content = editor.document.getText(editor.selection);
   const uri = editor.document.uri;
   const repo = await git.getRepoFor(uri);
   if (!repo) {
@@ -107,11 +117,14 @@ async function inferContextFromActiveEditor(): Promise<{
 
   const commit = await repo.getCommit('HEAD');
 
-  return { repos, filepath, lineRange, commit };
+  return { repos, filepath, lineRange, content, commit };
 }
 
 function descriptionFromSource(source: CaptureSource) {
-  return `Rule captured from lines ${source.lineRange?.[0]} to ${source.lineRange?.[1]} of ${
-    source.filepath
-  } in commit ${source.commit?.hash.substring(0, 7)}`;
+  return `\`\`\`\n${source.content}\n\`\`\`\n\nRule captured from lines ${
+    source.lineRange?.[0]
+  } to ${source.lineRange?.[1]} of ${source.filepath} in commit ${source.commit?.hash.substring(
+    0,
+    7
+  )}`;
 }
