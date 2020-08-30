@@ -10,7 +10,7 @@ export default class Auth {
 
   private constructor() {
     this._options = {
-      redirectUri: config.auth.callbackUrl,
+      redirectUri: `${vscode.env.uriScheme}://${config.auth.callbackUrl}`,
       responseType: config.auth.responseType,
     };
 
