@@ -1,6 +1,6 @@
 import config from '../config';
 import { ProgressLocation, window } from 'vscode';
-import { CaptureSource, LineRange, Repo, Rule } from './model';
+import { CaptureSource, LineRange, Repo, Rule, CaptureInput } from './model';
 import * as git from '../git';
 import * as ui from '../ui';
 import axios from 'axios';
@@ -22,9 +22,9 @@ export default async function capture(): Promise<any> {
     return await ui.errorNoRepoDetected();
   }
 
-  const message = await ui.inputCaptureMessage(lineRange);
-  if (!message) {
-    return; // user cancelled or empty message
+  const input = await ui.inputCaptureContent(lineRange);
+  if (!input) {
+    return; // user cancelled or empty title
   }
 
   // TODO: check which repos are actually available for this user in codelingo
@@ -41,7 +41,7 @@ export default async function capture(): Promise<any> {
     content,
     commit,
   };
-  const rule = await storeRule(message, source, auth.accessToken)
+  const rule = await storeRule(input, source, auth.accessToken)
     .then((response) => {
       const rule = response.data;
       return {
@@ -65,7 +65,11 @@ export default async function capture(): Promise<any> {
   return await ui.showRuleWasCreated(rule, source);
 }
 
-async function storeRule(message: string, source: CaptureSource, token: string | undefined) {
+async function storeRule(
+  inputContent: CaptureInput,
+  source: CaptureSource,
+  token: string | undefined
+) {
   return await window.withProgress(
     {
       location: ProgressLocation.Window,
@@ -74,13 +78,20 @@ async function storeRule(message: string, source: CaptureSource, token: string |
     },
     async () => {
       const api = config.api;
+      let description = descriptionFromSource(source);
+
+      // If a description was supplied, prepend descriptionFromSource with the content.
+      if (inputContent.description) {
+        description = inputContent.description + '\n\n' + description;
+      }
+
       return await axios({
         url: `${api.host}/${api.paths.capture}/${source.owner}/${source.repo}`,
         method: 'POST',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         data: {
-          name: message,
-          description: descriptionFromSource(source),
+          name: inputContent.title,
+          description: description,
           query: '',
           functions: null,
           review_comment: '---',
