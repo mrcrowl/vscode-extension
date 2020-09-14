@@ -1,5 +1,12 @@
 import config from './config';
-import { Rule, CaptureSource, Repo, LineRange, RepoQuickPickItem } from './capture/model';
+import {
+  Rule,
+  CaptureSource,
+  Repo,
+  LineRange,
+  RepoQuickPickItem,
+  CaptureInput,
+} from './capture/model';
 import { window, env, Uri } from 'vscode';
 
 export async function showRuleWasCreated(rule: Rule, source: CaptureSource) {
@@ -44,7 +51,7 @@ export async function chooseRepo(repos: Repo[]): Promise<Repo | undefined> {
   return undefined;
 }
 
-export async function inputCaptureMessage(lineRange: LineRange | undefined) {
+export async function inputCaptureContent(lineRange: LineRange | undefined): Promise<CaptureInput> {
   function describeLineRange(lineRange: LineRange | undefined) {
     if (!lineRange) {
       return '';
@@ -54,12 +61,22 @@ export async function inputCaptureMessage(lineRange: LineRange | undefined) {
     return start === end ? `line ${start}` : `lines ${start}-${end}`;
   }
 
-  const result = await window.showInputBox({
-    placeHolder: 'Enter a message to capture',
-    prompt: `What Rule do you want to capture at ${describeLineRange(lineRange)}?`,
+  const titleResult = await window.showInputBox({
+    placeHolder: 'Enter a title for your rule',
+    prompt: `What rule do you want to capture at ${describeLineRange(lineRange)}?`,
   });
 
-  return result?.trim();
+  const descriptionResult = await window.showInputBox({
+    placeHolder: 'Add a description',
+    prompt: `Give your rule a description (optional)`,
+  });
+
+  const result: CaptureInput = {
+    title: titleResult?.trim(),
+    description: descriptionResult?.trim(),
+  };
+
+  return result;
 }
 
 export async function errorNoRepoChosen() {

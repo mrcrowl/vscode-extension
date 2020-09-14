@@ -12,6 +12,11 @@ export interface CaptureSource {
   commit: Commit | undefined;
 }
 
+export interface CaptureInput {
+  title: string | undefined;
+  description: string | undefined;
+}
+
 export interface Repo {
   owner: string;
   name: string;
