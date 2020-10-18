@@ -1,5 +1,5 @@
 import { ExtensionContext, workspace, commands, window, Uri, ProviderResult } from 'vscode';
-import capture from './capture/command';
+import capture, { shouldResumeCapture } from './capture/command';
 import * as git from './git';
 import * as ui from './ui';
 import Auth from './auth';
@@ -19,6 +19,10 @@ export async function activate(context: ExtensionContext): Promise<void> {
         const auth = Auth.getInstance();
         auth.accessToken = token;
         window.showInformationMessage('Login Successful');
+
+        if (shouldResumeCapture()) {
+          commands.executeCommand('codelingo.capture');
+        }
       }
     },
   });

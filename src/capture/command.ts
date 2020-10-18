@@ -7,6 +7,17 @@ import axios from 'axios';
 import { Commit } from '../@types/git';
 import Auth from '../auth';
 
+let captureWasInterrupted = false;
+
+export function shouldResumeCapture(): boolean {
+  if (captureWasInterrupted) {
+    captureWasInterrupted = false;
+    return true;
+  }
+
+  return false;
+}
+
 export default async function capture(): Promise<any> {
   const auth = Auth.getInstance();
   if (!auth.accessToken) {
@@ -14,6 +25,8 @@ export default async function capture(): Promise<any> {
     if (!ok) {
       return ui.errorNotLoggedIn();
     }
+
+    captureWasInterrupted = true; // signal to continue capture after authentication completes
     return await auth.authenticate();
   }
 
