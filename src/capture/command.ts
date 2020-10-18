@@ -134,7 +134,25 @@ async function inferContextFromActiveEditor(): Promise<{
 }
 
 function descriptionFromSource(source: CaptureSource) {
-  return `\`\`\`\n${source.content}\n\`\`\`\n\nCaptured from lines ${source.lineRange?.[0]} to ${
-    source.lineRange?.[1]
-  } in ${source.filepath} of commit ${source.commit?.hash.substring(0, 7)}`;
+  const codeBlock = `\`\`\`\n${source.content}\n\`\`\``;
+  return `${codeBlock}\n\nCaptured from ${describeFileAndCommit(source)}`;
+}
+
+function describeFileAndCommit(source: CaptureSource): string {
+  const hash = source.commit?.hash;
+  const startLine = source.lineRange?.[0];
+  const endLine = source.lineRange?.[1];
+  const fileLink = makeLink(
+    source.filepath,
+    `https://github.com/${source.owner}/${source.repo}/blob/${hash}/${source.filepath}#L${startLine}-L${endLine}`
+  );
+  const commitLink = makeLink(
+    hash?.substring(0, 7),
+    `https://github.com/${source.owner}/${source.repo}/commit/${hash}`
+  );
+  return `${fileLink} of commit ${commitLink}`;
+}
+
+function makeLink(content: string | undefined, url: string): string {
+  return `[${content}](${url})`;
 }
