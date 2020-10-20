@@ -51,7 +51,9 @@ export async function chooseRepo(repos: Repo[]): Promise<Repo | undefined> {
   return undefined;
 }
 
-export async function inputCaptureContent(lineRange: LineRange | undefined): Promise<CaptureInput> {
+export async function inputCaptureContent(
+  lineRange: LineRange | undefined
+): Promise<CaptureInput | undefined> {
   function describeLineRange(lineRange: LineRange | undefined) {
     if (!lineRange) {
       return '';
@@ -64,7 +66,13 @@ export async function inputCaptureContent(lineRange: LineRange | undefined): Pro
   const titleResult = await window.showInputBox({
     placeHolder: 'Enter a title for your rule',
     prompt: `What rule do you want to capture at ${describeLineRange(lineRange)}?`,
+    validateInput: (value) => (value.trim() === '' ? 'Title is required' : ''),
   });
+
+  if (!titleResult) {
+    // exit early when no title given
+    return;
+  }
 
   const descriptionResult = await window.showInputBox({
     placeHolder: 'Add a description',
@@ -72,8 +80,8 @@ export async function inputCaptureContent(lineRange: LineRange | undefined): Pro
   });
 
   const result: CaptureInput = {
-    title: titleResult?.trim(),
-    description: descriptionResult?.trim(),
+    title: titleResult.trim(),
+    description: descriptionResult?.trim() ?? '',
   };
 
   return result;

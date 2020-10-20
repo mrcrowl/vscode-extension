@@ -13,8 +13,8 @@ export interface CaptureSource {
 }
 
 export interface CaptureInput {
-  title: string | undefined;
-  description: string | undefined;
+  title: string;
+  description: string;
 }
 
 export interface Repo {

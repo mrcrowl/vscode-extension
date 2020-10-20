@@ -2,8 +2,11 @@
 
 All notable changes to the "codelingo" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## v0.0.11
 
-## [Unreleased]
+- Disallow blank title for rule
+- Cancelling on title cancels the capture immediately.
 
-- Initial release
+## v0.0.10
+
+- Resume capture after login
