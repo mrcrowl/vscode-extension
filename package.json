@@ -3,7 +3,11 @@
   "publisher": "codelingo",
   "displayName": "CodeLingo Capture",
   "description": "Capture ideas for new coding rules to get your team writing better code faster",
+<<<<<<< HEAD
   "version": "0.0.11",
+=======
+  "version": "0.0.10",
+>>>>>>> upstream/master
   "icon": "images/cl-logo.png",
   "engines": {
     "vscode": "^1.31.0"
