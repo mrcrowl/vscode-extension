@@ -36,11 +36,8 @@ export default async function capture(): Promise<any> {
   }
 
   const input = await ui.inputCaptureContent(lineRange);
-  // Explicitly check for undefined on description as an
-  // empty string (falsy) is valid input for description.
-  // If description === undefined, the user cancelled the capture.
-  if (!input.title || input.description === undefined) {
-    return; // user cancelled or empty title
+  if (!input) {
+    return; // user cancelled
   }
 
   // TODO: check which repos are actually available for this user in codelingo
